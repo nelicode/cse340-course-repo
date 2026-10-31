@@ -1,33 +1,131 @@
-html,
-body {
-    background-color: lightblue;
-    font-family: Arial, sans-serif;
+/* Estilos Generales y Reseteo */
+* {
     margin: 0;
-    padding: 20px;
-}
-
-body nav ul {
-    list-style-type: none;
     padding: 0;
+    box-sizing: border-box;
 }
 
-body nav li {
-    display: inline;
-    margin-right: 15px;
-}
-
-body nav a {
-    text-decoration: none;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    /* Un gris muy claro, elegante */
     color: #333;
-    font-weight: bold;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-body nav a:hover {
-    color: #0066cc;
+/* Navegación */
+nav {
+    background-color: #1a365d;
+    /* Azul marino profesional */
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #63b3ed;
+    /* Azul claro al pasar el mouse */
+}
+
+/* Contenido Principal */
+main {
+    flex: 1;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+    color: #2d3748;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #3182ce;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+h2 {
+    color: #4a5568;
+    margin-bottom: 15px;
+}
+
+p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+/* Listas e Imágenes */
+ul {
+    list-style-position: inside;
+    margin-bottom: 20px;
+}
+
+li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
 li img {
-    width: 40px;
-    height: 40px;
-    vertical-align: middle;
+    width: 45px;
+    height: 45px;
     margin-right: 15px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #edf2f7;
+}
+
+.main-logo {
+    display: block;
+    max-width: 300px;
+    margin: 30px auto;
+}
+
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1a365d;
+    color: #a0aec0;
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+
+/* Responsive para celulares */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    main {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
 }
