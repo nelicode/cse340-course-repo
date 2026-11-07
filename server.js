@@ -1,8 +1,12 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { testConnection } from './src/models/db.js';
+import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
+import { getAllCategories } from './src/models/categories.js'; // <-- IMPORTACIÓN DE CATEGORÍAS AGREGADA
 
-// Variables de entorno
+// Environment variables
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
@@ -11,35 +15,57 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configurar EJS como motor de plantillas
+// Configure EJS as the template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// Servir archivos estáticos (CSS e imágenes)
+// Serve static files (CSS and images)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rutas usando res.render
+// Routes using res.render
 app.get('/', async (req, res) => {
     const title = 'Home';
     res.render('home', { title });
 });
 
+// --- ORGANIZATIONS ROUTE ---
 app.get('/organizations', async (req, res) => {
+    const organizations = await getAllOrganizations();
     const title = 'Our Partner Organizations';
-    res.render('organizations', { title });
+    res.render('organizations', { title, organizations });
 });
 
+// --- PROJECTS ROUTE ---
 app.get('/projects', async (req, res) => {
-    const title = 'Service Projects';
-    res.render('projects', { title });
+    try {
+        const projects = await getAllProjects();
+        const title = 'Service Projects';
+        res.render('projects', { title, projects });
+    } catch (error) {
+        console.error('Error loading projects page:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
+// --- CATEGORIES ROUTE UPDATED ---
 app.get('/categories', async (req, res) => {
-    const title = 'Service Project Categories';
-    res.render('categories', { title });
+    try {
+        const categories = await getAllCategories(); // Fetch categories from the database
+        const title = 'Service Project Categories';
+        res.render('categories', { title, categories }); // Pass categories to the EJS view
+    } catch (error) {
+        console.error('Error loading categories page:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://127.0.0.1:${PORT}`);
-    console.log(`Environment: ${NODE_ENV}`);
+// --- app.listen WITH CONNECTION TEST ---
+app.listen(PORT, async () => {
+    try {
+        await testConnection();
+        console.log(`Server is running at http://127.0.0.1:${PORT}`);
+        console.log(`Environment: ${NODE_ENV}`);
+    } catch (error) {
+        console.error('Error connecting to the database:', error);
+    }
 });

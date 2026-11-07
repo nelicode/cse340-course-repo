@@ -4,11 +4,14 @@
         <h1>
             <%= title %>
         </h1>
+
+        <p>Here are the categories of service projects we offer:</p>
         <ul>
-            <li>Environmental</li>
-            <li>Educational</li>
-            <li>Community Service</li>
-            <li>Health and Wellness</li>
+            <% categories.forEach(category=> { %>
+                <li><strong>
+                        <%= category.category_name %>
+                    </strong></li>
+                <% }); %>
         </ul>
     </main>
 
