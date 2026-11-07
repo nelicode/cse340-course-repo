@@ -2,7 +2,9 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
     connectionString: process.env.DB_URL,
-    ssl: true
+    ssl: {
+        rejectUnauthorized: false // <-- ESTA ES LA CORRECCIÓN PARA EL ERROR SSL
+    }
 });
 
 let db = null;
