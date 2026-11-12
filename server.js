@@ -4,9 +4,8 @@ import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js'; // <-- IMPORTACIÓN DE CATEGORÍAS AGREGADA
+import { getAllCategories } from './src/models/categories.js';
 
-// Environment variables
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
@@ -15,27 +14,21 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configure EJS as the template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
-
-// Serve static files (CSS and images)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes using res.render
 app.get('/', async (req, res) => {
     const title = 'Home';
     res.render('home', { title });
 });
 
-// --- ORGANIZATIONS ROUTE ---
 app.get('/organizations', async (req, res) => {
     const organizations = await getAllOrganizations();
     const title = 'Our Partner Organizations';
     res.render('organizations', { title, organizations });
 });
 
-// --- PROJECTS ROUTE ---
 app.get('/projects', async (req, res) => {
     try {
         const projects = await getAllProjects();
@@ -47,19 +40,17 @@ app.get('/projects', async (req, res) => {
     }
 });
 
-// --- CATEGORIES ROUTE UPDATED ---
 app.get('/categories', async (req, res) => {
     try {
-        const categories = await getAllCategories(); // Fetch categories from the database
+        const categories = await getAllCategories();
         const title = 'Service Project Categories';
-        res.render('categories', { title, categories }); // Pass categories to the EJS view
+        res.render('categories', { title, categories });
     } catch (error) {
         console.error('Error loading categories page:', error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-// --- app.listen WITH CONNECTION TEST ---
 app.listen(PORT, async () => {
     try {
         await testConnection();
