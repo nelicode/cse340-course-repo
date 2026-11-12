@@ -8,9 +8,7 @@
         <p>Here are the categories of service projects we offer:</p>
         <ul>
             <% categories.forEach(category=> { %>
-                <li>
-                    <%= category.category_name %>
-                </li>
+                <li><strong><%= category.category_name %></strong></li>
                 <% }); %>
         </ul>
     </main>
