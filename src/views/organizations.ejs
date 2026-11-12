@@ -11,9 +11,9 @@
                 <li>
                     <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"
                         style="width: 40px; vertical-align: middle; margin-right: 10px;">
-                    <strong>
+                    <a href="/organization/<%= organization.organization_id %>">
                         <%= organization.name %>
-                    </strong>: <%= organization.contact_email %>
+                    </a>: <%= organization.contact_email %>
                 </li>
                 <% }); %>
         </ul>

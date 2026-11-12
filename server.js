@@ -2,11 +2,8 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/routes.js';
 
-// Environment variables
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
@@ -15,14 +12,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configure EJS as the template engine
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// Serve static files (CSS and images)
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Middleware to log all incoming requests
 app.use((req, res, next) => {
     if (NODE_ENV === 'development') {
         console.log(`${req.method} ${req.url}`);
@@ -30,54 +23,13 @@ app.use((req, res, next) => {
     next();
 });
 
-// Middleware to make NODE_ENV available to all templates
 app.use((req, res, next) => {
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });
 
-// Routes using res.render
-app.get('/', async (req, res) => {
-    const title = 'Home';
-    res.render('home', { title });
-});
-
-// --- ORGANIZATIONS ROUTE ---
-app.get('/organizations', async (req, res) => {
-    const organizations = await getAllOrganizations();
-    const title = 'Our Partner Organizations';
-    res.render('organizations', { title, organizations });
-});
-
-// --- PROJECTS ROUTE ---
-app.get('/projects', async (req, res) => {
-    try {
-        const projects = await getAllProjects();
-        const title = 'Service Projects';
-        res.render('projects', { title, projects });
-    } catch (error) {
-        console.error('Error loading projects page:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// --- CATEGORIES ROUTE UPDATED ---
-app.get('/categories', async (req, res) => {
-    try {
-        const categories = await getAllCategories(); 
-        const title = 'Service Project Categories';
-        res.render('categories', { title, categories }); 
-    } catch (error) {
-        console.error('Error loading categories page:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-// Test route for 500 errors
-app.get('/test-error', (req, res, next) => {
-    const err = new Error('This is a test error');
-    err.status = 500;
-    next(err);
-});
+//RUTAS//
+app.use(router);
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
@@ -102,7 +54,7 @@ app.use((err, req, res, next) => {
 
     res.status(status).render(`errors/${template}`, context);
 });
-// --- app.listen WITH CONNECTION TEST ---
+
 app.listen(PORT, async () => {
     try {
         await testConnection();
