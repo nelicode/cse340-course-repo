@@ -16,6 +16,7 @@ const getUpcomingProjects = async (number_of_projects) => {
         ORDER BY p.date ASC
         LIMIT $1;
     `;
+    
     const queryParams = [number_of_projects];
     const result = await db.query(query, queryParams);
     return result.rows;
