@@ -31,6 +31,13 @@ app.use((req, res, next) => {
 //RUTAS//
 app.use(router);
 
+// 500 errors 
+app.get('/test-error', (req, res, next) => {
+    const err = new Error('This is a test error');
+    err.status = 500;
+    next(err);
+});
+
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');
